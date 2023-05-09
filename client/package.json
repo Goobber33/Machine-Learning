@@ -10,6 +10,7 @@
     "@types/node": "^16.18.27",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
+    "env": "^0.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
@@ -39,5 +40,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "\"\"",
+  "main": "index.js",
+  "repository": "https://github.com/Goobber33/Machine-Learning/tree/main/client",
+  "author": "Kyle Parks",
+  "license": "MIT"
 }
