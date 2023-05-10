@@ -14,7 +14,7 @@ sagemaker_session = sagemaker.Session()
 role = get_execution_role()
 
 # Get the image URI for the factorization machines algorithm
-image_uri = get_image_uri(sagemaker_session.boto_region_name, 'factorization-machines')
+image_uri = sagemaker.image_uris.retrieve('factorization-machines', sagemaker_session.boto_region_name)
 
 # Define the estimator
 fm = sagemaker.estimator.Estimator(
@@ -22,11 +22,11 @@ fm = sagemaker.estimator.Estimator(
     role, 
     train_instance_count=1, 
     train_instance_type='ml.c4.xlarge',
-    output_path='s3://your_bucket_name_here/output',
+    output_path='s3://kylemachine/output',
     sagemaker_session=sagemaker_session)
 
 # Set hyperparameters
-fm.set_hyperparameters(feature_dim=..., predictor_type='regressor', ...)
+fm.set_hyperparameters(feature_dim=..., predictor_type='regressor')
 
 # Convert data to RecordSet format
 train_data = fm.record_set(train_data.to_numpy().astype('float32'), ...)
