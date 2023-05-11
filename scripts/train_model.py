@@ -1,13 +1,17 @@
+import os
 import pandas as pd
 import sagemaker
 from sagemaker import get_execution_role
 from sagemaker.amazon.amazon_estimator import get_image_uri
 from sklearn.model_selection import train_test_split
 import s3fs
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
 
 # Create a connection to your s3 bucket
 
-fs = s3fs.S3FileSystem(anon=False)
+fs = s3fs.S3FileSystem(anon=False, key=os.getenv("AWS_ACCESS_KEY_ID"), secret=os.getenv("AWS_SECRET_ACCESS_KEY"))
 
 # Load movie ratings data
 
@@ -33,7 +37,7 @@ X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2)
 # Get SageMaker session and role
 
 sagemaker_session = sagemaker.Session()
-role = get_execution_role()
+role = "arn:aws:iam::557284392936:role/service-role/AmazonSageMaker-ExecutionRole-20230510T095521"
 
 # Get the image URI for the factorization machines algorithm
 
