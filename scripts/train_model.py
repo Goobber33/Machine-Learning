@@ -48,21 +48,31 @@ image_uri = sagemaker.image_uris.retrieve('factorization-machines', sagemaker_se
 fm = sagemaker.estimator.Estimator(
     image_uri,
     role, 
-    train_instance_count=1, 
-    train_instance_type='ml.c4.xlarge',
+    instance_count=1, 
+    instance_type='ml.c4.xlarge',
     output_path='s3://kylemachine/output',
     sagemaker_session=sagemaker_session)
 
 # Set hyperparameters
 # You need to set the feature_dim to the number of features in your data
 
-fm.set_hyperparameters(feature_dim=X_train.shape[1], predictor_type='regressor')
+fm.set_hyperparameters(feature_dim=X_train.shape[1], predictor_type='regressor', num_factors=64)
 
-# Convert data to RecordSet format
+# Save the data locally
+X_train.to_csv('train.csv', header=False, index=False)
+X_val.to_csv('validation.csv', header=False, index=False)
 
-train_data = fm.record_set(X_train.to_numpy().astype('float32'), y_train.to_numpy().astype('float32'))
-validation_data = fm.record_set(X_val.to_numpy().astype('float32'), y_val.to_numpy().astype('float32'))
+# Upload the files to S3
+train_uri = sagemaker_session.upload_data('train.csv', bucket='kylemachine', key_prefix='data')
+val_uri = sagemaker_session.upload_data('validation.csv', bucket='kylemachine', key_prefix='data')
+
+# Delete the local files
+os.remove('train.csv')
+os.remove('validation.csv')
+
+# Create pointers to the S3 locations
+train_data = sagemaker.inputs.TrainingInput(train_uri, content_type='text/csv')
+validation_data = sagemaker.inputs.TrainingInput(val_uri, content_type='text/csv')
 
 # Train the model
-
-fm.fit([train_data, validation_data])
+fm.fit({'train': train_data, 'validation': validation_data})
