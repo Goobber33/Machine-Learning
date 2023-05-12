@@ -1,22 +1,22 @@
 import boto3
 import sagemaker
-from sagemaker import get_execution_role
 from sagemaker.amazon.amazon_estimator import get_image_uri
 from sagemaker.inputs import TrainingInput
-from sagemaker.predictor import csv_serializer, json_deserializer
+from sagemaker.serializers import CSVSerializer
+from sagemaker.deserializers import JSONDeserializer
 
 # Specify the ARN of your role in SageMaker
-role = get_execution_role()
+role = 'arn:aws:iam::557284392936:role/service-role/AmazonSageMaker-ExecutionRole-20230510T095521'
 
 # Specify your bucket name
 bucket_name = 'kylemachine'
 
 # Specify the locations of the train and test data
-train_data = TrainingInput('s3://kylemachine/Unsaved/2023/05/10/tables/65facefa-0ebb-4179-9f52-196eaf0ef042-manifest.csv', content_type='text/csv')
-test_data = TrainingInput('s3://kylemachine/Unsaved/2023/05/10/tables/e8bb48bf-be83-4d59-af54-1ac9c18454d9-manifest.csv', content_type='text/csv')
+train_data = TrainingInput('s3://kylemachine/data/recordio/train', content_type='application/x-recordio-protobuf')
+test_data = TrainingInput('s3://kylemachine/data/recordio/validation', content_type='application/x-recordio-protobuf')
 
 # Specify the location to store the output
-output_location = 's3://{}/output'.format(bucket_name)
+output_location = 's3://kylemachine/output'
 
 # Get the URI for the Factorization Machines algorithm
 container = get_image_uri(boto3.Session().region_name, 'factorization-machines')
@@ -30,8 +30,8 @@ estimator = sagemaker.estimator.Estimator(container,
                                           sagemaker_session=sagemaker.Session())
 
 # Set hyperparameters (replace 'num_factors' and 'epochs' with your desired values)
-estimator.set_hyperparameters(feature_dim=50000,
-                              predictor_type='binary_classifier',
+estimator.set_hyperparameters(feature_dim=23,  # You might need to adjust this based on your actual feature dimension
+                              predictor_type='binary_classifier',  # Adjust this based on your problem type (regressor or binary_classifier)
                               num_factors=64,
                               epochs=10)
 
@@ -42,6 +42,5 @@ estimator.fit({'train': train_data, 'test': test_data})
 predictor = estimator.deploy(initial_instance_count=1, instance_type='ml.m4.xlarge')
 
 # Specify the serializer and deserializer
-predictor.content_type = 'text/csv'
-predictor.serializer = csv_serializer
-predictor.deserializer = json_deserializer
+predictor.serializer = CSVSerializer()
+predictor.deserializer = JSONDeserializer()
