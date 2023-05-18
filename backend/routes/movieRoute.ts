@@ -1,5 +1,4 @@
 import express from 'express';
-import axios from 'axios';
 import AWS from 'aws-sdk';
 
 const router = express.Router();
