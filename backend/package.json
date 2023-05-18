@@ -9,13 +9,19 @@
     "start": "ts-node server.ts"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/express-validator": "^3.0.0",
+    "@types/mongoose": "^5.11.97",
     "aws-sdk": "^2.1379.0",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0"
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.1.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
