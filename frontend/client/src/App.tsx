@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import LoginPage from './Login';
+import SignupPage from './Signup';
+import './App.sass';
 
 function App() {
+  const handleLogin = (username: string, password: string) => {
+    // Handle login here
+  };
+
+  const handleSignup = (username: string, password: string) => {
+    // Handle signup here
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <header className="app-header">
+          <h1>Welcome to Our App!</h1>
+          <nav className="nav">
+            <Link to="/" className="nav-link btn btn-info">Login</Link>
+            <Link to="/signup" className="nav-link">Sign Up</Link>
+          </nav>
+          <Routes>
+            <Route path="/" element={<LoginPage handleLogin={handleLogin} />} />
+            <Route path="/signup" element={<SignupPage handleSignup={handleSignup} />} />
+          </Routes>
+        </header>
+      </div>
+    </Router>
   );
 }
 
