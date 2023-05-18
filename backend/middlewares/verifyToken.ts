@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import express from 'express';
 
 const verifyToken: express.RequestHandler = (req, res, next) => {
@@ -9,7 +9,11 @@ const verifyToken: express.RequestHandler = (req, res, next) => {
     token = authorization.substring(7);
   }
 
-  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+  if (!process.env.JWT_SECRET) {
+    throw new Error('Missing env var JWT_SECRET');
+  }
+
+  const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
 
   if (!token || !decodedToken.id) {
     return res.status(401).json({ error: 'token missing or invalid' });

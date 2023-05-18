@@ -3,6 +3,8 @@ import movieRoutes from './routes/movieRoute';
 import userRoutes from './routes/userRoutes';
 import verifyToken from './middlewares/verifyToken';
 
+require('dotenv').config()
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 

@@ -22,6 +22,9 @@ router.post('/login', async (req, res) => {
     username: mockUser.username,
   };
 
+  if (!process.env.JWT_SECRET) {
+    throw new Error('Missing env var JWT_SECRET');
+  }
   const token = jwt.sign(userForToken, process.env.JWT_SECRET);
 
   res.json({ token, username: mockUser.username });
