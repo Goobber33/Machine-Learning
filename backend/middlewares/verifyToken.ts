@@ -15,7 +15,7 @@ const verifyToken: express.RequestHandler = (req, res, next) => {
 
   const decodedToken = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload;
 
-  if (!token || !decodedToken.id) {
+  if (!token || !decodedToken.username) {
     return res.status(401).json({ error: 'token missing or invalid' });
   }
 
