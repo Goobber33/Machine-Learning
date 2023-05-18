@@ -19,7 +19,7 @@ test_data = TrainingInput('s3://kylemachine/data/recordio/validation', content_t
 output_location = 's3://kylemachine/output'
 
 # Get the URI for the Factorization Machines algorithm
-container = get_image_uri(boto3.Session().region_name, 'factorization-machines')
+container = get_image_uri(boto3.Session().region_name, 'factorization-machines', 'us-east-1')
 
 # Initialize an Estimator for the Factorization Machines algorithm
 estimator = sagemaker.estimator.Estimator(container,
@@ -44,3 +44,9 @@ predictor = estimator.deploy(initial_instance_count=1, instance_type='ml.m4.xlar
 # Specify the serializer and deserializer
 predictor.serializer = CSVSerializer()
 predictor.deserializer = JSONDeserializer()
+
+# Print out the endpoint name
+print("SageMaker Endpoint Name: ", predictor.endpoint_name)
+
+# Delete the endpoint (uncomment this when you want to delete the endpoint)
+# predictor.delete_endpoint()
