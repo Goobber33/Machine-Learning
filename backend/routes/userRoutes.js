@@ -1,6 +1,6 @@
-import express from 'express';
-import { check } from 'express-validator';
-import { signin, signup } from '../controllers/userController';
+const express = require('express');
+const { check } = require('express-validator');
+const { signin, signup } = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -28,4 +28,4 @@ router.post(
   signin
 );
 
-export default router;
+module.exports = router;

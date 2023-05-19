@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
-import User from '../models/userModel';
-import { validationResult } from 'express-validator';
-import bcrypt from 'bcryptjs';
+const express = require('express');
+const User = require('../models/userModel');
+const { validationResult } = require('express-validator');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
-export const signup = async (req: Request, res: Response) => {
+const signup = async (req, res) => {
   // Validate the request
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -34,15 +35,26 @@ export const signup = async (req: Request, res: Response) => {
     // Save the user to the database
     await user.save();
 
-    // Return some kind of success response, e.g. user data, authentication token, etc.
-    res.status(200).json({ msg: 'User registered successfully.' });
-  } catch (err: any) { // Here, define err as any
+    // Generate a JWT token
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '1h', // Token expiration time (optional)
+    });
+
+    // Return the token in the response
+    res.status(200).json({ token, msg: 'User registered successfully.' });
+  } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
 };
 
-export const signin = async (req: Request, res: Response) => {
+const signin = async (req, res) => {
   // Validate the request
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -66,10 +78,26 @@ export const signin = async (req: Request, res: Response) => {
       return res.status(400).json({ errors: [{ msg: 'Invalid Credentials' }] });
     }
 
-    // Return some kind of success response, e.g. user data, authentication token, etc.
-    res.status(200).json({ msg: 'User logged in successfully.' });
-  } catch (err: any) { // Here, define err as any
+    // Generate a JWT token
+    const payload = {
+      user: {
+        id: user.id,
+      },
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+      expiresIn: '1h', // Token expiration time (optional)
+    });
+
+    // Return the token in the response
+    res.status(200).json({ token, msg: 'User logged in successfully.' });
+  } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
   }
+};
+
+module.exports = {
+  signup,
+  signin,
 };

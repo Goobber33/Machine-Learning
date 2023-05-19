@@ -1,7 +1,5 @@
-import express from 'express';
-import AWS from 'aws-sdk';
-
-const router = express.Router();
+const express = require('express');
+const AWS = require('aws-sdk');
 
 // Configure AWS with your access and secret key.
 const { AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY } = process.env; // Ensure these are set in your .env file
@@ -15,7 +13,7 @@ const sagemakerRuntime = new AWS.SageMakerRuntime({
   region: 'us-west-1', // Update this if your SageMaker endpoint is in another region
 });
 
-router.get('/predict/:userId/:movieId', async (req, res) => {
+const predictMovieRating = async (req, res) => {
   // Get user ID and movie ID from the request parameters
   const { userId, movieId } = req.params;
 
@@ -34,8 +32,14 @@ router.get('/predict/:userId/:movieId', async (req, res) => {
   try {
     const response = await sagemakerRuntime.invokeEndpoint(params).promise();
 
-    // Convert the Body to string and then parse it as JSON
-    const resultString = response.Body.toString();
+    // Convert the BodyBlob to Buffer
+    const buffer = Buffer.from(response.Body, 'binary');
+
+    // Then convert Buffer to Uint8Array
+    const uint8array = new Uint8Array(buffer);
+
+    // Now decode the Uint8Array
+    const resultString = new TextDecoder("utf-8").decode(uint8array);
     const result = JSON.parse(resultString);
 
     // Assuming the model returns a single prediction value (adjust this based on what your model returns)
@@ -48,7 +52,8 @@ router.get('/predict/:userId/:movieId', async (req, res) => {
     console.error('Error invoking SageMaker endpoint:', error);
     res.status(500).json({ error: 'Error invoking SageMaker endpoint' });
   }
+};
 
-});
-
-export default router;
+module.exports = {
+  predictMovieRating,
+};
