@@ -24,7 +24,7 @@ mongoose.connect(MONGODB_URI)
 // Middleware
 app.use(express.json());
 app.use(cors({
-  origin: true,
+  origin: ['https://goobber33.github.io', 'http://localhost:3000'], // include both local and deployed frontend URLs
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization']
 }));

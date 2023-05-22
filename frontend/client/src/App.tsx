@@ -22,6 +22,8 @@ function App() {
     }
 
     const data = await response.json();
+    const token = data.token; // Assuming the server sends back the token as `token`
+    localStorage.setItem('token', token); // Store the token in localStorage
     // Do something with the token, like storing it
   };
 
@@ -42,11 +44,14 @@ function App() {
     }
 
     const data = await response.json();
-    // Do something with the data
+    const token = data.token; // Assuming the server sends back the token as `token`
+    localStorage.setItem('token', token); // Store the token in localStorage
+    // Do something with the token
   };
 
+
   return (
-    <Router>
+    <Router basename="/Machine-Learning">
       <div className="App">
         <header className="app-header">
           <h1>Welcome to Our App!</h1>
