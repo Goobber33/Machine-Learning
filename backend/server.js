@@ -5,7 +5,7 @@ const movieRoutes = require('./routes/movieRoute');
 const userRoutes = require('./routes/userRoutes');
 const verifyToken = require('./middlewares/verifyToken');
 
-require('dotenv').config();
+require('dotenv').config(); 
 
 const app = express();
 const PORT = process.env.PORT || 5000;

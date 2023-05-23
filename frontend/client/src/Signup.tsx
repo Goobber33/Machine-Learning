@@ -12,7 +12,7 @@ const SignupPage: React.FC<SignupProps> = ({ handleSignup }) => {
   const submitHandler = (e: React.FormEvent) => {
     e.preventDefault();
     handleSignup(username, password);
-  };
+  }; 
 
   return (
     <div className="signup-container">

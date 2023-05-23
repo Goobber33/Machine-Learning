@@ -5,7 +5,7 @@ from sagemaker.inputs import TrainingInput
 from sagemaker.serializers import CSVSerializer
 from sagemaker.deserializers import JSONDeserializer
 
-# Specify the ARN of your role in SageMaker
+# Specify the ARN of your role in SageMaker 
 role = 'arn:aws:iam::557284392936:role/service-role/AmazonSageMaker-ExecutionRole-20230510T095521'
 
 # Specify your bucket name

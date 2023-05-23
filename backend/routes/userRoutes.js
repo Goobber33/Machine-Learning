@@ -4,7 +4,7 @@ const { signin, signup } = require('../controllers/userController');
 
 const router = express.Router();
 
-// Registration route
+// Registration route 
 router.post(
   '/signup',
   [

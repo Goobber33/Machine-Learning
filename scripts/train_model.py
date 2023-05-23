@@ -20,7 +20,7 @@ with fs.open('s3://kylemachine/movies.csv', 'rb') as f:
     movies = pd.read_csv(f)
 
 with fs.open('s3://kylemachine/ratings.csv', 'rb') as f:
-    ratings = pd.read_csv(f)
+    ratings = pd.read_csv(f) 
 
 # Merge movies and ratings data
 data = pd.merge(movies, ratings)

@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
   // Allow the root path ("/") to be accessed without requiring a token
   if (req.path === '/') {
     return next();
-  }
+  } 
 
   // Check if the token exists
   if (!token) {

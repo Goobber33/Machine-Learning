@@ -35,7 +35,7 @@ const LoginPage: React.FC<LoginProps> = ({ handleLogin }) => {
         <button type="submit">Log In</button>
       </form>
     </div>
-  );
+  ); 
 };
 
 export default LoginPage;

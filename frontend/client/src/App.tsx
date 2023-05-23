@@ -19,7 +19,7 @@ function App() {
       // Handle error
       console.log('Login error');
       return;
-    }
+    } 
 
     const data = await response.json();
     const token = data.token; // Assuming the server sends back the token as `token`
